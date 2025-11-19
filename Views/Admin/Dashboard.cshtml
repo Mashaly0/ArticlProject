@@ -1,0 +1,32 @@
+﻿@model UserDashboardVM
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">مرحباً @Model.UserName 👋</h2>
+
+    <div class="card mb-4 shadow">
+        <div class="card-body">
+            <h4>عدد المقالات الخاصة بك: @Model.ArticlesCount</h4>
+        </div>
+    </div>
+
+    <h4>مقالاتك:</h4>
+
+    <table class="table table-bordered table-striped text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>العنوان</th>
+                <th>النوع</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Articles)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Type</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,168 @@
+﻿@model IEnumerable<Article>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدونة المقالات - فلترة</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://source.unsplash.com/random/1600x900/?library');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+        }
+
+        .card {
+            transition: transform .3s;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+        .filter-button-group .btn {
+            border-radius: 20px;
+            margin: 0 5px;
+            transition: .3s;
+        }
+
+            .filter-button-group .btn.active {
+                background-color: #0d6efd;
+                color: white;
+                border-color: #0d6efd;
+            }
+    </style>
+</head>
+
+<body>
+
+    <header class="hero-section text-center">
+        <div class="container">
+            <h1 class="fw-bold">أحدث المقالات</h1>
+            <p class="lead">استخدم الأزرار في الأسفل لتصنيف المقالات حسب النوع</p>
+        </div>
+    </header>
+
+    <section id="articles" class="py-5 bg-light">
+        <div class="container">
+
+            <!-- أزرار الفلترة -->
+            <div class="row mb-5">
+                <div class="col-12 d-flex justify-content-center filter-button-group">
+
+                    <!-- زر الكل -->
+                    <button class="btn btn-outline-primary active" data-filter="all">الكل</button>
+
+                    <!-- أزرار حسب النوع من الداتا -->
+                    @foreach (var type in ViewBag.Types)
+                    {
+                        <button class="btn btn-outline-primary" data-filter="@type">@type</button>
+                    }
+
+                </div>
+            </div>
+
+            <!-- عرض الكروت من الداتا بيز -->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="article-grid">
+
+                @foreach (var item in Model)
+                {
+                    <div class="col article-item category-@item.Type">
+                        <div class="card h-100 border-0 shadow-sm">
+
+                            <img src="~/images/Articles/@item.Image" class="card-img-top" />
+
+                            <div class="card-body">
+                                <span class="badge bg-primary mb-2">@item.Type</span>
+
+                                <h5 class="card-title fw-bold">@item.Title</h5>
+
+                                <p class="card-text text-muted">
+                                    @(item.Description.Length > 50
+                                                                    ? item.Description.Substring(0, 50) + "..."
+                                                                    : item.Description)
+                            </p>
+
+                                <!-- زر التفاصيل -->
+                                <a asp-controller="Articles"
+                                   asp-action="Details"
+                                   asp-route-id="@item.ArticleId"
+                                   class="btn btn-outline-primary">
+                                    تفاصيل
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                                }
+            </div>
+
+            </div>
+
+    </section>
+    <section id="about" class="py-5">
+        <div class="container">
+
+            <div class="row justify-content-center text-center">
+
+                <!-- النص فقط بدون صورة -->
+                <div class="col-lg-8 mb-4">
+                    <h2 class="fw-bold mb-3">نبذة عن موقع المقالات</h2>
+
+                    <p class="lead text-muted">
+                        موقعنا هو منصة تهدف إلى توفير محتوى مميز، منسّق، وسهل القراءة.
+                        ندعم نشر المقالات في مختلف المجالات مثل التقنية، التعليم، الصحة،
+                        التنمية الذاتية، والمزيد.
+                    </p>
+
+                    <p class="text-muted">
+                        نؤمن بأن المعرفة يجب أن تكون متاحة للجميع، لذلك نعمل على توفير
+                        مقالات موثوقة، مكتوبة بعناية، وموجهة لجميع مستويات القرّاء.
+                        هدفنا هو تقديم تجربة قراءة ممتعة وذات قيمة في قالب بسيط واحترافي.
+                    </p>
+
+                    <a href="#articles" class="btn btn-primary mt-3">تصفح المقالات</a>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const filterButtons = document.querySelectorAll('.filter-button-group button');
+            const articles = document.querySelectorAll('.article-item');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const filterValue = button.getAttribute('data-filter');
+
+                    articles.forEach(article => {
+                        if (filterValue === 'all' || article.classList.contains('category-' + filterValue)) {
+                            article.classList.remove('d-none');
+                        } else {
+                            article.classList.add('d-none');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

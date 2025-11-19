@@ -1,0 +1,11 @@
+﻿@model Author
+
+<h2>Articles by @Model.Name</h2>
+
+@foreach (var item in Model.Articles)
+{
+    <div class="border p-3 mb-2">
+        <h4>@item.Title</h4>
+        <p>@item.Description</p>
+    </div>
+}
