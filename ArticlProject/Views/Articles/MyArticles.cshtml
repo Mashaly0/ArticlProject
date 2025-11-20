@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Article>
+
+<h2>Articles</h2>
+
+<a asp-action="Create" class="btn btn-primary">Create New</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Author</td>
+                <td>@item.Description</td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.AuthorId"
+                       class="btn btn-sm btn-primary">
+                        تعديل
+                    </a>
+
+                    <a asp-action="Delete" asp-route-id="@item.AuthorId"
+                       class="btn btn-sm btn-danger ms-2">
+                        حذف
+                    </a>
+                </td>
+            </tr>
+        }
+        
+    </tbody>
+</table>
